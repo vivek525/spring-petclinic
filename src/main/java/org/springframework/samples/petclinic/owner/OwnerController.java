@@ -101,6 +101,11 @@ class OwnerController {
 	@GetMapping("/owners/find")
 	public String initFindForm(Map<String, Object> model) {
 		model.put("owner", new Owner());
+		/*
+		 * Thymeleaf is the template engine used in the PetClinic application.As with many things, 
+		 * Spring Boot provides a default location where it expects to find our templates.By default, Spring Boot looks for our templates in src/main/resources/templates. We can put our templates there and 
+		 * organize them in sub-directories 
+		 */
 		return "owners/findOwners";
 	}
 
