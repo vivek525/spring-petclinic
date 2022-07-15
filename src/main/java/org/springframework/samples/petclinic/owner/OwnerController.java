@@ -66,6 +66,12 @@ class OwnerController {
 	public String initCreationForm(Map<String, Object> model) {
 		Owner owner = new Owner();
 		model.put("owner", owner);
+		/*
+		 *  A String return value by default refers to a view name. If you want it to be the response then add the @ResponseBody annotation
+		 *  the @ResponseBody annotation tells the controller that the object returned should be automatically serialized to the configured media type
+		 *  @GetMapping(value = "/welcome", produces = MediaType.TEXT_HTML_VALUE)
+		 *  @ResponseBody. Reference https://www.baeldung.com/spring-mvc-return-html
+		 */
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
