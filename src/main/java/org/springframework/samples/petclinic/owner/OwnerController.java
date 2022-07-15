@@ -81,6 +81,18 @@ class OwnerController {
 			return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 		}
 		else {
+			/*
+			 * It is sometimes desirable to issue an HTTP redirect back to the client, before the view is rendered. 
+			 * This is desirable for example when one controller has been called with POSTed data, and the response is actually a 
+			 * delegation to another controller (for example on a successful form submission). 
+			 * In this case, a normal internal forward will mean the other controller will also see the same POST data, 
+			 * which is potentially problematic if it can confuse it with other expected data. Another reason to do a redirect before 
+			 * displaying the result is that this will eliminate the possibility of the user doing a double submission of form data. 
+			 * The browser will have sent the initial POST, will have seen a redirect back and done a subsequent GET because of that, 
+			 * and thus as far as it is concerned, the current page does not reflect the result of a POST, 
+			 * but rather of a GET, so there is no way the user can accidentally re-POST the same data by doing a refresh. 
+			 * The refresh forces a GET of the result page, not a resend of the initial POST data.
+			 */
 			this.owners.save(owner);
 			return "redirect:/owners/" + owner.getId();
 		}
@@ -139,6 +151,10 @@ class OwnerController {
 
 	@GetMapping("/owners/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
+		/*
+		 * @GetMapping or @RequestMapping annotation can be used to construct the dynamic or the run-time URI i.e. to pass in the parameters. 
+		 * This can be achieved by using the @PathVariable
+		 */
 		Owner owner = this.owners.findById(ownerId);
 		model.addAttribute(owner);
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
