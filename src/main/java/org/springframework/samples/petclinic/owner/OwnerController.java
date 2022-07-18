@@ -56,7 +56,15 @@ class OwnerController {
 	public void setAllowedFields(WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
 	}
-
+    /* https://www.baeldung.com/spring-mvc-and-the-modelattribute-annotation
+     * When we use the annotation at the method level, it indicates the purpose of the method is to add one or more model attributes.
+     * @ModelAttribute methods are invoked before the controller methods annotated with @RequestMapping are invoked. This call to the @ModelAttribute annotated method
+     * happens before each call to handler methods
+     * When we use the annotation as a method argument, it indicates to retrieve the argument from the model. 
+     * Ex public String submit(@ModelAttribute("employee") Employee employee). 
+     * A lookup of the string employee happens against the Model object and the correspondng Employee object is returned 
+     *      
+     *      */
 	@ModelAttribute("owner")
 	public Owner findOwner(@PathVariable(name = "ownerId", required = false) Integer ownerId) {
 		return ownerId == null ? new Owner() : this.owners.findById(ownerId);
@@ -104,7 +112,7 @@ class OwnerController {
 		/*
 		 * Thymeleaf is the template engine used in the PetClinic application.As with many things, 
 		 * Spring Boot provides a default location where it expects to find our templates.By default, Spring Boot looks for our templates in src/main/resources/templates. We can put our templates there and 
-		 * organize them in sub-directories 
+		 * organize them in sub-directories. https://www.baeldung.com/spring-thymeleaf-template-directory 
 		 */
 		return "owners/findOwners";
 	}
@@ -112,6 +120,10 @@ class OwnerController {
 	@GetMapping("/owners")
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
 			Model model) {
+		/* Model interface is available in the org.springframework.ui package. It acts as a data container that contains the data of the application. 
+		 * That stored data can be of any form such as String, Object, data from the Database, etc.
+		 * https://www.geeksforgeeks.org/spring-mvc-model-interface/ 
+		 */
 
 		// allow parameterless GET request for /owners to return all records
 		if (owner.getLastName() == null) {
@@ -154,6 +166,19 @@ class OwnerController {
 
 	}
 
+	/*
+	 * https://dzone.com/articles/spring-boot-passing-parameters
+	 * Passing parameters when requesting URLs is one of the most basic features in Spring Boot.There are two ways to pass parameters
+	 * 1. Request Parameter https://www.youtube.com/watch?v=tuNhqqxgxXQ&t=153s In the above URL, there are two parameters which are v and t. To pass the parameters, put “?”. Then, add the parameter name followed by “=” and the value of the parameter. It will look like this “?v=value”. 
+	 * To pass another, use “&” followed by the second parameter as the first one.
+	 * 2. Path Variable - http://www.twitter.com/hashimati. The word “hashimati” in this URL is a variable.
+	 */
+	
+	/*
+	 * Path Variable can be handled as in the example below. For Request Parameter there are 2 options
+	 * Option 1 - public String hello1(@RequestParam(name="name", required = false, defaultValue = "Ahmed") String name)--Call out the request param in method signature
+	 * Option 2 - public String hello2(Parms parameters) -- Create a domain object and encapsulate the parameters in an object, Spring will do the binding for you
+	 */
 	@GetMapping("/owners/{ownerId}/edit")
 	public String initUpdateOwnerForm(@PathVariable("ownerId") int ownerId, Model model) {
 		/*
@@ -192,3 +217,8 @@ class OwnerController {
 	}
 
 }
+
+/*
+https://www.javacodegeeks.com/2018/06/domain-objects-spring-mvc.html
+https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#mvc-ann-modelattrib-method-args
+*/
